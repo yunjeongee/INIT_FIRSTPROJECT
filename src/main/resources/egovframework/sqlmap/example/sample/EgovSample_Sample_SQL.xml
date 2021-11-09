@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Sample">
+
+   <typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+   <typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+
+   <resultMap id="sample" class="egovframework.example.sample.service.SampleVO">
+      <result property="goodsNum" column="goods_num" />
+      <result property="goodsName" column="goods_name"/>
+      <result property="material" column="material"/>
+      <result property="goodsFuntion" column="funtion"/>
+      <result property="priceRetail" column="price_retail"/>
+      <result property="manufactureName" column="manufacture_name"/>
+       <result property="manufactureCode" column="manufacture_code"/>
+      <result property="shoppingFee" column="shopping_fee"/>
+      <result property="imgUrl" column="img_url" />
+      <result property="discountRate" column="discount_rate"/>
+      <result property="vendorCode" column="vendor_code"/>
+      <result property="vendorName" column="vendor_name"/>
+   </resultMap>
+   
+      <resultMap id="goodsdetail" class="egovframework.example.sample.service.SampleVO">
+      <result property="goodsNum" column="goods_num" />
+      <result property="goodsName" column="goods_name"/>
+      <result property="material" column="material"/>
+      <result property="goodsFuntion" column="funtion"/>
+      <result property="manufactureName" column="manufacture_name"/>
+   
+     
+   </resultMap>
+   
+      <resultMap id="shopdetail" class="egovframework.example.sample.service.SampleVO">
+      <result property="goodsNum" column="goods_num" />
+      <result property="priceRetail" column="price_retail"/>
+      <result property="shoppingFee" column="shopping_fee"/>
+      <result property="vendorCode" column="vendor_code"/>
+      <result property="vendorName" column="vendor_name"/>
+   </resultMap>
+   
+   
+      <resultMap id="sample2" class="egovframework.example.sample.service.SampleVO">
+      <result property="vendorCode" column="vendor_code"/>
+      <result property="vendorName" column="vendor_name"/>
+   </resultMap>
+   
+    <resultMap id="sample3" class="egovframework.example.sample.service.SampleVO">
+      <result property="manufactureName" column="manufacture_name"/>
+       <result property="manufactureCode" column="manufacture_code"/>
+   </resultMap>
+   
+   
+
+   <update id="sampleDAO.insertGoods">
+     
+ 				INSERT INTO GOODS(GOODS_NUM, MANUFACTURE_CODE, GOODS_NAME, FUNTION, MATERIAL) 
+					VALUES(SEQ_GOODSNUM.NEXTVAL,#manufactureCode#,#goodsName#,#goodsFuntion#,#material#)          
+      
+				
+<!-- 					INSERT INTO SAMPLE 
+            ( ID
+              , NAME
+              , DESCRIPTION
+              , USE_YN
+              , REG_USER )
+         VALUES ( #id#
+              , #name#
+              , #description#
+              , #useYn#
+              , #regUser# )
+               -->
+   </update>
+   
+      <insert id="sampleDAO.insertShop">
+  
+					INSERT INTO VENDOR(GOODS_NUM, VENDOR_CODE,PRICE_RETAIL,SHOPPING_FEE) VALUES (#goodsNum#,#vendorCode#,#priceRetail#,#shoppingFee#)
+
+   </insert>
+   
+   <update id="sampleDAO.updateSample">
+      <![CDATA[
+         
+		     MERGE 
+		      INTO GOODS AA 
+		      USING (
+		             SELECT A.GOODS_NUM
+		                  , A.GOODS_NAME 
+		                  , A.MANUFACTURE_CODE
+		                  , A.MATERIAL
+		                  , A.FUNTION
+		               FROM GOODS A 
+		               LEFT JOIN MANUFACTURE M ON A.MANUFACTURE_CODE = M.MANUFACTURE_CODE 
+		              WHERE 1 = 1   
+		                AND A.GOODS_NUM = #goodsNum#
+		            )TT
+		           ON (TT.GOODS_NUM = #goodsNum# AND AA.GOODS_NUM = TT.GOODS_NUM)
+		           WHEN MATCHED THEN 
+		                UPDATE 
+		                   SET AA.GOODS_NAME = #goodsName#
+		                      ,AA.MATERIAL = #material#
+		                      ,AA.FUNTION = #goodsFuntion#
+		      ]]>
+   </update>
+   
+    <update id="sampleDAO.updateShop">
+      <![CDATA[
+      
+						  MERGE 
+						  INTO VENDOR VV 
+						  USING (
+						          SELECT V.GOODS_NUM
+						               , V.PRICE_RETAIL
+						               , D.DISCOUNT_RATE
+						               , V.VENDOR_CODE
+						               , V.SHOPPING_FEE
+						               , V2.VENDOR_NAME               
+						            FROM VENDOR V 
+						            LEFT JOIN DISCOUNT D ON V.GOODS_NUM = D.GOODS_NUM
+						            LEFT JOIN VENDORLIST V2 ON V.VENDOR_CODE = V2.VENDOR_CODE
+						           WHERE 1 = 1   
+						             AND V.GOODS_NUM = #goodsNum#
+						             AND V.VENDOR_CODE = #vendorCode#
+						          )TT
+						     ON (TT.GOODS_NUM = #goodsNum# AND TT.VENDOR_CODE = #vendorCode# AND VV.GOODS_NUM = TT.GOODS_NUM AND VV.VENDOR_CODE = TT.VENDOR_CODE)
+						   WHEN MATCHED THEN 
+						   UPDATE 
+						    SET VV.PRICE_RETAIL = #priceRetail#
+						       ,VV.SHOPPING_FEE = #shoppingFee#
+      ]]>
+   </update>
+   
+  
+  
+  
+   <delete id="sampleDAO.deleteSample">
+     
+     
+      DELETE FROM GOODS 
+       WHERE GOODS_NUM = #goodsNum#
+     
+      <!-- <![CDATA[
+         DELETE FROM SAMPLE 
+         WHERE ID=#id#
+      ]]> -->
+      
+   </delete>
+   
+   
+    
+    <select id="sampleDAO.selectVendor" resultMap="sample2">
+            
+				SELECT * FROM VENDORLIST
+  
+    </select>
+    
+    
+    <select id="sampleDAO.selectManufacture" resultMap="sample3">
+            
+				   SELECT * FROM MANUFACTURE 
+  
+    </select>
+   
+   
+    
+    <select id="sampleDAO.selectGoods" resultMap="goodsdetail">
+            
+				SELECT T.* 
+				       FROM 
+				           ( 
+				            SELECT A.GOODS_NUM
+				                 , A.GOODS_NAME 
+				                 , A.FUNTION
+				                 , A.MATERIAL
+				                 , M.MANUFACTURE_NAME 
+				              FROM GOODS A 			              
+				              LEFT JOIN MANUFACTURE M ON A.MANUFACTURE_CODE = M.MANUFACTURE_CODE 
+				             WHERE 1 = 1   
+				             AND A.GOODS_NUM = #goodsNum#
+				             <!-- AND I.IMAGE_FIRST = 'Y' -->
+				           ) T
+       
+    </select>
+   
+   <select id="sampleDAO.selectShop" resultMap="shopdetail" >
+            
+       SELECT T.* 
+           FROM 
+               ( 
+                SELECT A.GOODS_NUM
+                     , V.PRICE_RETAIL
+                     , D.DISCOUNT_RATE
+                     , V.VENDOR_CODE
+                     , V.SHOPPING_FEE
+                     , V2.VENDOR_NAME               
+                  FROM GOODS A
+                  LEFT JOIN DISCOUNT D ON A.GOODS_NUM = D.GOODS_NUM
+                  LEFT JOIN VENDOR V ON A.GOODS_NUM = V.GOODS_NUM
+                  LEFT JOIN VENDORLIST V2 ON V.VENDOR_CODE = V2.VENDOR_CODE
+                  WHERE 1 = 1   
+                 AND A.GOODS_NUM = #goodsNum#
+                 AND V.VENDOR_CODE = #vendorCode#
+               ) T
+                               
+    </select>
+   
+   
+   <select id="sampleDAO.selectShopList" parameterClass="searchVO" resultClass="egovMap" >
+ 
+         SELECT T.* 
+           FROM 
+               ( 
+                SELECT A.GOODS_NUM
+                     , A.GOODS_NAME                
+                     , V.VENDOR_CODE 
+                     , V.PRICE_RETAIL  
+                     , V.SHOPPING_FEE
+                     , V2.VENDOR_NAME 
+                     , DENSE_RANK() OVER (ORDER BY V.VENDOR_CODE DESC) AS DENSE_RANK
+                     , ROW_NUMBER() OVER (ORDER BY V.VENDOR_CODE DESC) AS R_N
+                  FROM GOODS A           
+                  LEFT JOIN VENDOR V ON A.GOODS_NUM = V.GOODS_NUM
+                  LEFT JOIN VENDORLIST V2 ON V.VENDOR_CODE = V2.VENDOR_CODE                    
+            WHERE 1 = 1 
+            AND A.GOODS_NUM = #goodsNum#                 
+				         <isEqual prepend="AND" property="searchCondition" compareValue="0">
+				            VENDOR_CODE LIKE '%' || #searchKeyword# || '%'
+				         </isEqual>
+				         <isEqual prepend="AND" property="searchCondition" compareValue="1">
+				            VENDOR_NAME LIKE '%' || #searchKeyword# || '%'
+				         </isEqual>
+				     ) T 
+				       <![CDATA[
+   
+      WHERE DENSE_RANK >= #pageUnit# * #pageIndex# - (#pageUnit#-1) 
+        AND DENSE_RANK <= #pageUnit# * #pageIndex#
+   	  ORDER BY DENSE_RANK
+        ]]>
+				     
+     
+
+   </select>
+   
+    <select id="sampleDAO.selectGoodsList" parameterClass="searchVO" resultClass="egovMap">
+ 
+
+     SELECT T.* 
+       FROM 
+           ( 
+            SELECT A.GOODS_NUM
+                 , A.GOODS_NAME 
+                 , I.IMG_URL 
+                 , DENSE_RANK() OVER (ORDER BY A.GOODS_NUM DESC) AS DENSE_RANK
+                 , ROW_NUMBER() OVER (ORDER BY A.GOODS_NUM DESC) AS R_N
+              FROM GOODS A 
+                 , IMAGE I             
+        WHERE 1 = 1 
+          AND I.GOODS_NUM(+) = A.GOODS_NUM  
+          AND I.IMAGE_FIRST(+)= 'Y'
+         <isEqual prepend="AND" property="searchCondition" compareValue="0">
+            A.GOODS_NUM LIKE '%' || #searchKeyword# || '%'
+         </isEqual>
+         <isEqual prepend="AND" property="searchCondition" compareValue="1">
+            A.GOODS_NAME LIKE '%' || #searchKeyword# || '%'
+         </isEqual>
+     ) T 
+     
+       <![CDATA[
+   
+      WHERE DENSE_RANK >= #pageUnit# * #pageIndex# - (#pageUnit#-1) 
+        AND DENSE_RANK <= #pageUnit# * #pageIndex#
+   	  ORDER BY DENSE_RANK
+        ]]>
+          
+   </select>
+   
+   
+   
+   <select id="sampleDAO.selectSampleListTotCnt" parameterClass="searchVO" resultClass="int">
+
+          SELECT COUNT(*) totcnt
+         FROM GOODS A 
+              LEFT JOIN IMAGE I ON A.GOODS_NUM = I.GOODS_NUM 
+              LEFT JOIN DISCOUNT D ON A.GOODS_NUM = D.GOODS_NUM 
+        WHERE 1 = 1 
+         <isEqual prepend="AND" property="searchCondition" compareValue="0">
+            GOODS_NUM LIKE '%' || #searchKeyword# || '%'
+         </isEqual>
+         <isEqual prepend="AND" property="searchCondition" compareValue="1">
+            GOODS_NAME LIKE '%' || #searchKeyword# || '%'
+         </isEqual>
+    </select>
+    
+    
+   <select id="sampleDAO.selectShopListTotCnt" parameterClass="searchVO" resultClass="int">
+
+          SELECT COUNT(*) totcnt
+											 FROM GOODS A 
+				        LEFT JOIN VENDOR V ON A.GOODS_NUM = V.GOODS_NUM 
+				        LEFT JOIN VENDORLIST V2 ON V.VENDOR_CODE = V2.VENDOR_CODE 
+				        WHERE 1 = 1 
+				        AND A.GOODS_NUM = #goodsNum# 
+				         <isEqual prepend="AND" property="searchCondition" compareValue="0">
+				            VENDOR_CODE LIKE '%' || #searchKeyword# || '%'
+				         </isEqual>
+				         <isEqual prepend="AND" property="searchCondition" compareValue="1">
+				            VENDOR_NAME LIKE '%' || #searchKeyword# || '%'
+				         </isEqual>
+    </select>
+    
+
+</sqlMap>
