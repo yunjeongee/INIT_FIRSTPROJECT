@@ -61,5 +61,32 @@
 	<!-- /For Pagination Tag -->
 
     <mvc:view-controller path="/cmmn/validator.do" view-name="cmmn/validator"/>
+    
+    <!-- json 관련 설정 -->
+   
+
+<!--    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/> 
+   <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1" 
+    p:prefix="/WEB-INF/jsp/" 
+    p:suffix=".jsp" 
+    p:viewClass="org.springframework.web.servlet.view.JstlView"/>
+ -->    
+
+    
+    <bean id="beanNameResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="0"/>
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+        <property name="contentType" value="application/json;charset=UTF-8"></property>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"> 
+    <property name="order" value="1"> 
+    </property></bean> 
+    
+    <!-- 화면처리용 JSP 파일명의 prefix, suffix 처리에 대한 mvc 설정 --> 
+    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="2" 
+    									p:viewClass="org.springframework.web.servlet.view.JstlView" 
+    									p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
+
+
 </beans>
 

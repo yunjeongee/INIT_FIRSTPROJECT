@@ -28,6 +28,7 @@
 <script type="text/javascript">
    $.jgrid.no_legacy_api = true;
    $.jgrid.useJSON = true;
+   
 </script>
 <script src="<c:url value='/js/jqgrid/ui.multiselect.js'/>" type="text/javascript"></script>
 <script src="<c:url value='/js/jqgrid/jquery.jqGrid.js'/>" type="text/javascript"></script>
@@ -35,17 +36,20 @@
 <script src="<c:url value='/js/jqgrid/jquery.contextmenu.js'/>" type="text/javascript"></script>
 
 
+
 <script>
 $(document).ready(function() {
-    
    
-   
-    var cnames = ['아이디','이름','전화번호','주소','기타','성별코드'];
+     var cnames = ['아이디','이름','전화번호'];  /*컬럼이랑 갯수 맞춰*/
+     var data12 = {};
+     var params = $("#listForm").serialize();
  
     $("#jqGrid").jqGrid({
         
-        url: "GoodsList.do",
-        datatype: "JSON",
+        /* url: "jqGridTest.do", */
+        datatype: "local",
+        mtype:'POST',
+        colNames : cnames,
         colModel:[
                   
                   {name:'goodsNum',index:'seq', width:55, key:true, align:"center"},
@@ -68,7 +72,7 @@ $(document).ready(function() {
                   ],
                   
         height: 480,
-        rowNum: 10,
+        rowNum: 5,
         width : 900,
         rowList: [10,20,30],
         pager: '#jqGridPager',
@@ -78,7 +82,7 @@ $(document).ready(function() {
            
  
             if(iCol == 1) {
-                alert(rowId+" 째줄 입니다.");
+                alert(rowId +" 째줄 입니다.");
             }
         },
         
@@ -99,11 +103,16 @@ $(document).ready(function() {
         // ajax 통신
         $.ajax({
             type : "POST",            // HTTP method type(GET, POST) 형식이다.
-            url : "<c:url value='/Test.do'/>",      // 컨트롤러에서 대기중인 URL 주소이다.
-            data : params,            // Json 형식의 데이터이다.
-            success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+            url : "<c:url value='/ajaxTest.do'/>",      // 컨트롤러에서 대기중인 URL 주소이다.
+            /* contentType: 'application/json' */
+            data : data12,            // Json 형식의 데이터이다.
+            datatype: "json",
+            /* async: this.asyncflag,  */
+         			success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
                 // 응답코드 > 0000
-                alert(res.VendorList);
+                /* alert(data); */
+                 $('#jqGrid').jqGrid('clearGridData', true); 		
+                 $('#jqGrid').jqGrid('setGridParam',{data:data.goodsList}).trigger('reloadGrid'); 
             },
             error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
                 alert("통신 실패.")
@@ -123,6 +132,9 @@ $(document).ready(function() {
 
 </head>
 <body>
+<form:form commandName="searchVO" id="listForm" name="listForm" method="post">
+<input type="hidden" name="selectedId" value="1234"/>
+<input type="hidden" name="gmgm" value="7777"/>
 test
 <div class="row">
    <div>
@@ -133,6 +145,6 @@ test
 
                          <input type="button" value="버튼" id="request"/>
                          
-                         
+</form:form>                         
 </body>
 </html>
