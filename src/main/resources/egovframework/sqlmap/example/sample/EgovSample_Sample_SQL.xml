@@ -78,6 +78,12 @@
 
    </insert>
    
+    <insert id="sampleDAO.insertVendor">
+  
+					INSERT INTO VENDORLIST(VENDOR_CODE, VENDOR_NAME) VALUES (SEQ_VENDOR, #vendorName#)
+
+   </insert>
+   
    <update id="sampleDAO.updateSample">
       <![CDATA[
          
@@ -143,6 +149,20 @@
          DELETE FROM SAMPLE 
          WHERE ID=#id#
       ]]> -->
+      
+   </delete>
+   
+   
+    <delete id="sampleDAO.deleteShop">
+     
+     
+						DELETE FROM VENDOR 
+						 WHERE VENDOR_CODE = #vendorCode# 
+     
+      <!-- <![CDATA[
+         DELETE FROM SAMPLE 
+         WHERE ID=#id#
+      ]]> --> 
       
    </delete>
    

@@ -65,6 +65,15 @@ public interface EgovShopService {
 	 * @exception Exception
 	 */
 	String insertShop(SampleVO vo) throws Exception;
+	
+	
+	/**
+	 * 판매처의 상세항목을 등록한다.
+	 * @param vo - 등록할 정보가 담긴 SampleVO
+	 * @return 등록 결과
+	 * @exception Exception
+	 */
+	String insertVendor(SampleVO vo) throws Exception;
 
 	
 
@@ -93,6 +102,14 @@ public interface EgovShopService {
 	 * @exception Exception
 	 */
 	void deleteSample(SampleVO vo) throws Exception;
+	
+	/**
+	 * 판매처를 삭제한다.
+	 * @param vo - 삭제할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	void deleteShop(SampleVO vo) throws Exception;
 
 	/**
 	 * 글을 조회한다.

@@ -228,7 +228,7 @@ public class EgovShopController {
 	
 	
 	/**
-	 * 판매처 상세 목록 글 등록 화면을 조회한다.
+	 * 상픔리스트의 판매처 상세 목록 글 등록 화면을 조회한다.
 	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
 	 * @param model
 	 * @return "egovSampleRegister"
@@ -254,7 +254,7 @@ public class EgovShopController {
 	
 	
 	/**
-	 * 판매처 상세 항목을 등록한다.
+	 * 상품의  판매처 상세 항목을 등록한다.
 	 * @param sampleVO - 등록할 정보가 담긴 VO
 	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
 	 * @param status
@@ -280,7 +280,7 @@ public class EgovShopController {
 	}
 	
 	/**
-	 * 판매처  추가 등록 화면을 조회한다.
+	 * 새로운 판매처  추가 등록 화면을 조회한다.
 	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
 	 * @param model
 	 * @return "egovSampleRegister"
@@ -299,6 +299,35 @@ public class EgovShopController {
 		return "shop/createVendor";
 	
 	}
+	
+	
+	
+	/**
+	 * 새로운 판매처를 추가 등록.
+	 * @param sampleVO - 등록할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return "forward:/egovSampleList.do"
+	 * @exception Exception
+	 */
+	
+	@RequestMapping(value = "/addVendor.do")
+	public String addVendor(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model, SessionStatus status)
+			throws Exception {
+
+		// Server-Side Validation
+/*		beanValidator.validate(sampleVO, bindingResult);
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("sampleVO", sampleVO);
+			return "shop/egovShopRegister";
+		}*/
+
+		shopService.insertVendor(sampleVO);
+		status.setComplete();
+		return "forward:/egovShopRegister.do";
+	}
+	
 	
 	
 
@@ -469,6 +498,25 @@ public class EgovShopController {
 		return "forward:/egovGoodsList.do";
 	}
 
+	/**
+	 * 판매처를 삭제한다.
+	 * @param sampleVO - 삭제할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return "forward:/egovSampleList.do"
+	 * @exception Exception
+	 */
+	
+	@RequestMapping("/deleteShop.do")
+	public String deleteShop(SampleVO sampleVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO, SessionStatus status) throws Exception {
+
+		shopService.deleteShop(sampleVO);
+		status.setComplete();
+
+	
+		return "forward:/egovShopList.do";
+	}
+
 	
 	
 	
@@ -481,56 +529,87 @@ public class EgovShopController {
 	 * @exception Exception
 	 */
 	
-	@RequestMapping(value = "/GoodsList.do", produces = "application/text; charset=UTF-8")
-    public @ResponseBody String getTaskList(@ModelAttribute("searchVO") SampleDefaultVO searchVO,
-        HttpServletRequest request,HttpServletResponse response,
-            @RequestParam boolean _search,
-            @RequestParam long     nd,
+	@RequestMapping(value = "/jqGridTest.do", produces = "application/text; charset=UTF-8")
+    public @ResponseBody String jqGridTest(SampleDefaultVO searchVO,
+        HttpServletRequest request,HttpServletResponse response,      
             @RequestParam int    rows,
             @RequestParam int    page,
             @RequestParam String sidx,
             @RequestParam String  sord
     ) throws Exception {
 
-        // System.err.println("search = " + _search + " : nd = " + nd + " : rows = " + rows +
-        //                             " : pages = " + page + " : sidx = " + sidx  + " : sord =" + sord);
-
-    HashMap<String,Object> params = new HashMap<String,Object>();
-
-    /*    int start =  ((page - 1) * rows ) + 1;
-    int limit = (start + rows) -1;
-
-    System.err.println("start = " + start + " : limit = " + limit);
-    params.put("start", start );
-    params.put("limit", limit);*/
+   /* HashMap<String,Object> params = new HashMap<String,Object>(); */
     
     List<?> sampleList = shopService.selectGoodsList(searchVO);
 
     String value = "";
 
 
-        ObjectMapper mapper = new ObjectMapper();
+      ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, Object> modelMap = new HashMap<String, Object>();
-        // total = Total Page
-        // record = Total Records
-        // rows = list data
-        // page = current page
-
+     Map<String, Object> modelMap = new HashMap<String, Object>();
         
-        modelMap.put("rows", sampleList);
+     modelMap.put("rows", sampleList);  /*.put("key값", value값)*/
 
 
-        value = mapper.writeValueAsString(modelMap);
+     value = mapper.writeValueAsString(modelMap);
 
     return value;
     }
 
 	
-	@RequestMapping(value = "/addGrid.do")
+	@RequestMapping(value = "/addGrid.do" )
 	 public String addGrid(@ModelAttribute("searchVO") SampleDefaultVO searchVO, ModelMap model) throws Exception {
-	    return "shop/GridTest";
+	    
+		
+		return "shop/GridTest";
 	}
 	
+	/**
+	 * Ajax Test.
+	 * @param sampleVO - 삭제할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return "forward:/egovSampleList.do"
+	 * @exception Exception
+	 */
+	
+/*	@RequestMapping(value = "/ajaxTest.do", produces = "application/text; charset=UTF-8")
+    public @ResponseBody String ajaxTest(@ModelAttribute("searchVO") SampleDefaultVO searchVO,
+        HttpServletRequest request,HttpServletResponse response
+    ) throws Exception {
+
+        HashMap<String,Object> params = new HashMap<String,Object>();
+
+    List<?> sampleList = shopService.selectGoodsList(searchVO);
+
+    String value = "";
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    Map<String, Object> modelMap = new HashMap<String, Object>();
+            
+    modelMap.put("rows", sampleList);
+             
+    value = mapper.writeValueAsString(modelMap);
+        
+    return value;
+    }*/
+	
+	
+	@RequestMapping(value = "/ajaxTest.do", method=RequestMethod.POST)
+    public ModelAndView ajaxTest(SampleVO sampleVO,
+        HttpServletRequest request,HttpServletResponse response) 
+    throws Exception {
+
+    /*    HashMap<String,Object> params = new HashMap<String,Object>();*/
+
+    List<?> sampleList = shopService.selectGoodsList(sampleVO);
+    
+
+    ModelAndView mav = new ModelAndView("jsonView");
+    mav.addObject("goodsList", sampleList);
+    return mav;
+    }
 	   
 }

@@ -44,10 +44,10 @@
     }
         
       
-    /* 글 등록 function */
+    /* 글 등록 function ifans*/
     function fn_egov_save() {
         	frm = document.detailForm;
-         frm.action = "<c:url value="${registerFlag == 'create' ? '/addShop.do' : '/updateShop.do'}"/>";
+         frm.action = "<c:url value="${registerFlag == 'create' ? '/addVendor.do' : '/updateShop.do'}"/>";
          frm.submit();      
     }
         
@@ -97,10 +97,13 @@
     		<ul> 
 
     			<li>
-           <span class="btn_blue_l">
-           <a href="javascript:document.detailForm.reset();"><spring:message code="button.reset" /></a>
-           <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
-           </span>
+																					<span class="btn_blue_l">
+                        <a href="javascript:fn_egov_save();">
+                            <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
+                            <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
+                        </a>
+                        <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
+                    </span>
        </li>
      </ul>
     	</div>

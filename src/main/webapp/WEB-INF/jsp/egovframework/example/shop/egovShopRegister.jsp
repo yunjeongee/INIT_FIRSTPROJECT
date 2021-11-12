@@ -45,7 +45,7 @@
         
         /* 글 삭제 function */
         function fn_egov_delete() {
-           	document.detailForm.action = "<c:url value='/deleteSample.do'/>";
+           	document.detailForm.action = "<c:url value='/deleteShop.do'/>";
            	document.detailForm.submit();
         }
         

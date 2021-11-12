@@ -76,6 +76,17 @@ public class SampleDAO extends EgovAbstractDAO {
 	}
 	
 	
+	/**
+	 * 판매처 상세 항목 글을 등록한다.
+	 * @param vo - 등록할 정보가 담긴 SampleVO
+	 * @return 등록 결과
+	 * @exception Exception
+	 */
+	public String insertVendor(SampleVO vo) throws Exception {
+		return (String) insert("sampleDAO.insertVendor", vo);
+	}
+	
+	
 	
 
 	/**
@@ -109,6 +120,16 @@ public class SampleDAO extends EgovAbstractDAO {
 	 */
 	public void deleteSample(SampleVO vo) throws Exception {
 		delete("sampleDAO.deleteSample", vo);
+	}
+	
+	/**
+	 * 판매처를 삭제한다.
+	 * @param vo - 삭제할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	public void deleteShop(SampleVO vo) throws Exception {
+		delete("sampleDAO.deleteShop", vo);
 	}
 
 	/**
