@@ -3,6 +3,7 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
   /**
   * @Class Name : egovGoodsList.jsp
@@ -22,6 +23,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
 <head>
+
+				<link rel="stylesheet" type="text/css" href="<c:url value='/css/jquery-ui-custom.css'/>"  />
+				<link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.jqgrid.css'/>" />
+				<link rel="stylesheet" type="text/css" href="<c:url value='/css/ui.multiselect.css'/>" />
+				
+				<script src="<c:url value='/js/jqgrid/jquery.js'/>" type="text/javascript"></script>
+				<script src="<c:url value='/js/jqgrid/jquery-ui-custom.min.js'/>" type="text/javascript"></script>
+				<script src="<c:url value='/js/jqgrid/jquery.layout.js'/>" type="text/javascript"></script>
+				<script src="<c:url value='/js/jqgrid/grid.locale-en.js'/>" type="text/javascript"></script>
+				<script type="text/javascript">
+				   $.jgrid.no_legacy_api = true;
+				   $.jgrid.useJSON = true;
+				   
+				</script>
+				<script src="<c:url value='/js/jqgrid/ui.multiselect.js'/>" type="text/javascript"></script>
+				<script src="<c:url value='/js/jqgrid/jquery.jqGrid.js'/>" type="text/javascript"></script>
+				<script src="<c:url value='/js/jqgrid/jquery.tablednd.js'/>" type="text/javascript"></script>
+				<script src="<c:url value='/js/jqgrid/jquery.contextmenu.js'/>" type="text/javascript"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><spring:message code="title.sample" /></title>
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>"/>
@@ -72,6 +91,34 @@
         }
         
        
+	
+    $(document).ready(function(){
+							getgoodsList();
+				});
+				
+			
+				function getgoodsList(){
+					
+			        $.ajax({
+			            type : "POST",            // HTTP method type(GET, POST) 형식이다.
+			            url : "ajaxTest.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+			            data :$("#listForm").serialize(),            // Json 형식의 데이터이다.
+			            datatype: "json",
+			            /* async: this.asyncflag,  */
+			         			success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+			                // 응답코드 > 0000
+			                /* alert(data); */
+			                alert("통신 성공")
+			            },
+			            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+			                alert("통신 실패.")
+			            }
+			        });		
+					};
+					
+
+        
+             
     </script>
 </head>
 
@@ -94,7 +141,7 @@
         	<div id="search">
         		<ul>
         			<li>
-        			    <label for="searchCondition" style="visibility:hidden;"><spring:message code="search.choose" /></label>
+        			  <label for="searchCondition" style="visibility:hidden;"><spring:message code="search.choose" /></label>
         				<form:select path="searchCondition" cssClass="use">
         					<form:option value="1" label="상품명" />
         					<form:option value="0" label="상품번호" />
@@ -149,6 +196,7 @@
         	<!-- /List -->
         	<div id="paging">
         		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+        		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page"/>
         		<form:hidden path="pageIndex" />
         	
         	</div>
