@@ -436,6 +436,14 @@
     <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/> 
    
 
+</form:form>
+
+
+			<h1>파일 업로드</h1>
+			<form action="fileupload", method="post" enctype="multipart/form-data">
+			    <input type="file", name="uploadfile" placeholder="파일 선택" /><br/>
+			    <input type="submit" value="업로드">
+			</form>
 
 
 </form:form>

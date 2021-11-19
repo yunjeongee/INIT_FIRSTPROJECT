@@ -15,10 +15,12 @@
  */
 package egovframework.example.sample.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import egovframework.example.sample.service.EgovShopService;
 import egovframework.example.sample.service.SampleDefaultVO;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
@@ -517,6 +520,35 @@ public class EgovShopController {
 		return "forward:/egovShopList.do";
 	}
 
+	/*-----------파일업로드------------- */
+	
+	@RequestMapping(value = "/fileupload.do",method = RequestMethod.POST)
+	public void upload(MultipartFile uploadfile){
+	 
+		saveFile(uploadfile);
+	}
+	
+	private static final String UPLOAD_PATH = "C:\\Work\\fileupload";
+	private String saveFile(MultipartFile file){
+	    // 파일 이름 변경
+	    UUID uuid = UUID.randomUUID();
+	    String saveName = uuid + "_" + file.getOriginalFilename();
+
+	    // 저장할 File 객체를 생성(껍데기 파일)ㄴ
+	    File saveFile = new File(UPLOAD_PATH,saveName); // 저장할 폴더 이름, 저장할 파일 이름
+
+	    try {
+	        file.transferTo(saveFile); // 업로드 파일에 saveFile이라는 껍데기 입힘
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+
+	    return saveName;
+	} // end saveFile(
+
+	
+	
 	
 	
 	
