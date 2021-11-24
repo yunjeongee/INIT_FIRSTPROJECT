@@ -70,6 +70,19 @@ public class SampleVO extends SampleDefaultVO {
 	/** 상품 이미지 URL */
 	private String imgUrl;
 	
+	/** 이미지 번호 */
+	private String imgNum;
+	
+	
+	public String getImgNum() {
+		return imgNum;
+	}
+
+	public void setImgNum(String imgNum) {
+		this.imgNum = imgNum;
+	}
+
+
 	/** 대표 이미지 URL */
 	private String imgFirst;
 	

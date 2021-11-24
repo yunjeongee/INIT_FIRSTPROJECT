@@ -86,6 +86,16 @@ public class SampleDAO extends EgovAbstractDAO {
 		return (String) insert("sampleDAO.insertVendor", vo);
 	}
 	
+	/**
+	 * 상품의 이미지를 등록한다.
+	 * @param vo - 등록할 정보가 담긴 SampleVO
+	 * @return 등록 결과
+	 * @exception Exception
+	 */
+	public String insertImage(SampleVO vo) throws Exception {
+		return (String) insert("sampleDAO.insertImage", vo);
+	}
+	
 	
 	
 
@@ -171,6 +181,16 @@ public class SampleDAO extends EgovAbstractDAO {
 	 */
 	public List<?> selectManufacture(SampleVO sampleVO) throws Exception {
 		return list("sampleDAO.selectManufacture", sampleVO);
+	}
+	
+	/**
+	 * 상품리스트 수정페이지의 이미지를 조회한다.
+	 * @param searchMap - 조회할 정보가 담긴 Map
+	 * @return 글 목록
+	 * @exception Exception
+	 */
+	public List<?> selectImage(SampleVO sampleVO) throws Exception {
+		return list("sampleDAO.selectImage", sampleVO);
 	}
 
 	/**

@@ -142,6 +142,24 @@ public class EgovShopServiceImpl extends EgovAbstractServiceImpl implements Egov
 		return id;
 	}
 	
+	/**
+	 * 상품의 이미지를 등록한다.
+	 * @param vo - 등록할 정보가 담긴 SampleVO
+	 * @return 등록 결과
+	 * @exception Exception
+	 */
+	@Override
+	public String insertImage(SampleVO vo) throws Exception {
+		LOGGER.debug(vo.toString());
+
+		/** ID Generation Service */
+		String id = egovIdGnrService.getNextStringId();
+		vo.setId(id);
+		LOGGER.debug(vo.toString());
+
+		sampleDAO.insertImage(vo);
+		return id;
+	}
 	
 	
 
@@ -243,6 +261,18 @@ public class EgovShopServiceImpl extends EgovAbstractServiceImpl implements Egov
 	public List<?> selectManufacture(SampleVO sampleVO) throws Exception {
 		return sampleDAO.selectManufacture(sampleVO);
 	}
+	
+	/**
+	 * 상품리스트 수정페이지의 이미지를 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 글 목록
+	 * @exception Exception
+	 */
+	@Override
+	public List<?> selectImage(SampleVO sampleVO) throws Exception {
+		return sampleDAO.selectImage(sampleVO);
+	}
+	
 	
 	
 

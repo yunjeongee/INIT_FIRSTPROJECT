@@ -16,6 +16,7 @@
        <result property="manufactureCode" column="manufacture_code"/>
       <result property="shoppingFee" column="shopping_fee"/>
       <result property="imgUrl" column="img_url" />
+       <result property="imgFirst" column="img_first" />
       <result property="discountRate" column="discount_rate"/>
       <result property="vendorCode" column="vendor_code"/>
       <result property="vendorName" column="vendor_name"/>
@@ -47,7 +48,16 @@
    
     <resultMap id="sample3" class="egovframework.example.sample.service.SampleVO">
       <result property="manufactureName" column="manufacture_name"/>
-       <result property="manufactureCode" column="manufacture_code"/>
+      <result property="manufactureCode" column="manufacture_code"/>
+   </resultMap>
+   
+    <resultMap id="sample4" class="egovframework.example.sample.service.SampleVO">
+	   
+	     <result property="goodsNum" column="goods_num" />
+	     <result property="imgNum" column="img_num" />
+	     <result property="imgUrl" column="img_url" />
+	
+   
    </resultMap>
    
    
@@ -83,6 +93,14 @@
 					INSERT INTO VENDORLIST(VENDOR_CODE, VENDOR_NAME) VALUES (SEQ_VENDOR, #vendorName#)
 
    </insert>
+   
+   
+   <insert id="sampleDAO.insertImage">
+  
+					INSERT INTO IMAGE(GOODS_NUM,IMG_NUM,IMG_URL,IMAGE_FIRST) VALUES (#goodsNum#, SEQ_IMGNUM.NEXTVAL, #imgUrl#,'N')
+
+   </insert>
+   
    
    <update id="sampleDAO.updateSample">
       <![CDATA[
@@ -174,17 +192,28 @@
   
     </select>
     
-    
+     
     <select id="sampleDAO.selectManufacture" resultMap="sample3">
             
-				   SELECT * FROM MANUFACTURE 
+				SELECT * FROM MANUFACTURE 
   
     </select>
-   
+  
+    
+    <select id="sampleDAO.selectImage" resultMap="sample4">
+            
+    SELECT * 
+      FROM IMAGE I 
+    					, GOODS G
+    WHERE I.GOODS_NUM = G.GOODS_NUM 
+    AND I.GOODS_NUM = #goodsNum#
+		
+				
+    </select> 
    
     
     <select id="sampleDAO.selectGoods" resultMap="goodsdetail">
-            
+
 				SELECT T.* 
 				       FROM 
 				           ( 
@@ -194,11 +223,10 @@
 				                 , A.MATERIAL
 				                 , M.MANUFACTURE_NAME 
 				              FROM GOODS A 			              
-				              LEFT JOIN MANUFACTURE M ON A.MANUFACTURE_CODE = M.MANUFACTURE_CODE 
-				             WHERE 1 = 1   
-				             AND A.GOODS_NUM = #goodsNum#
-				             <!-- AND I.IMAGE_FIRST = 'Y' -->
+				              LEFT JOIN MANUFACTURE M ON A.MANUFACTURE_CODE = M.MANUFACTURE_CODE
+				              WHERE 1 = 1              
 				           ) T
+				             WHERE GOODS_NUM = #goodsNum#
        
     </select>
    
@@ -275,7 +303,7 @@
               FROM GOODS A 
                  , IMAGE I             
         WHERE 1 = 1 
-          AND I.GOODS_NUM(+) = A.GOODS_NUM  
+          AND I.GOODS_NUM(+) = A.GOODS_NUM 
           AND I.IMAGE_FIRST(+)= 'Y'
          <isEqual prepend="AND" property="searchCondition" compareValue="0">
             A.GOODS_NUM LIKE '%' || #searchKeyword# || '%'

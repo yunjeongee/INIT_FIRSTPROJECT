@@ -74,6 +74,15 @@ public interface EgovShopService {
 	 * @exception Exception
 	 */
 	String insertVendor(SampleVO vo) throws Exception;
+	
+	
+	/**
+	 * 상품의 이미지를 등록한다.
+	 * @param vo - 등록할 정보가 담긴 SampleVO
+	 * @return 등록 결과
+	 * @exception Exception
+	 */
+	String insertImage(SampleVO vo) throws Exception;
 
 	
 
@@ -143,6 +152,14 @@ public interface EgovShopService {
 	 * @exception Exception
 	 */
 	List<?> selectManufacture(SampleVO sampleVO) throws Exception;
+	
+	/**
+	 * 상품 리스트 수정페이지의 이미지 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 글 목록
+	 * @exception Exception
+	 */
+	List<?> selectImage(SampleVO sampleVO) throws Exception;
 	
 
 	/**

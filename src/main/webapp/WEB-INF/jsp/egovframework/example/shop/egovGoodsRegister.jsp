@@ -4,6 +4,7 @@
 <%@ taglib prefix="validator" uri="http://www.springmodules.org/tags/commons-validator" %>
 <%@ taglib prefix="spring"    uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <%
   /**
   * @Class Name : egovSampleRegister.jsp
@@ -96,14 +97,14 @@
 		       
     	   	var goodsName = $("#goodsName").val();
         	var manufactureName = $("#manufactureName").val();
-        	var manufactureCode = $("#manufactureCode").val();
-        	var material = $("#material").val();
+        	var manufactureCode = $("#manufactureCode").val();       
         	var goodsfunction = $("#goodsfunction").val();
+        	var material = $("#material").val();
         	
      
-        if(manufactureName == ""){
+        if(manufactureCode == ""){
         	alert("제조사를 입력해주세요.");
-        	$("#manufactureName").focus();
+        	$("#manufactureCode").focus();
         	return;
         }
         
@@ -396,14 +397,17 @@
 					    		    
 					    		    	<li>
 					             <span class="btn_blue_l">
+					             
 					             <a href="javascript:fn_egov_save();">
 							             <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
 							             <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
 					             </a>
+					             
 					             <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
 					             </span>
 					           </li>
 					    
+					    			
 					    			<c:if test="${registerFlag == 'modify'}">
 					           <li>
 					             <span class="btn_blue_l">
@@ -447,5 +451,16 @@
 
 
 </form:form>
+						
+							<h2>파일 업로드</h2>
+								
+								<form  method="post" enctype="multipart/form-data" id="imageForm" name="imageForm">
+									    <input type="file", name="uploadfile" placeholder="파일 선택" /><br/>
+									    <input type="submit" value="업로드" onclick="javascript:insertImg();"/>							    
+									    <input type="hidden" name="selectedId" value="<c:out value='${sampleVO.goodsNum}'/>"/>
+									</form>					
+						
+
+
 </body>
 </html>

@@ -331,6 +331,36 @@ public class EgovShopController {
 		return "forward:/egovShopRegister.do";
 	}
 	
+
+	
+	/**
+	 * 새로운 이미지를 추가 등록.
+	 * @param sampleVO - 등록할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return "forward:/egovSampleList.do"
+	 * @exception Exception
+	 */
+	
+	@RequestMapping(value = "/addImage.do")
+	public String addImage(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model, SessionStatus status)
+			throws Exception {
+
+		// Server-Side Validation
+/*		beanValidator.validate(sampleVO, bindingResult);
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("sampleVO", sampleVO);
+			return "shop/egovShopRegister";
+		}*/
+
+		shopService.insertImage(sampleVO);
+		status.setComplete();
+		
+		return "forward:/egovGoodsRegister.do";
+	}
+	
+	
 	
 	
 
@@ -353,6 +383,9 @@ public class EgovShopController {
 		
 		List<?> manufacture = shopService.selectManufacture(sampleVO);
 		model.addAttribute("resultManufacture",manufacture);
+		
+		List<?> img = shopService.selectImage(sampleVO);
+		model.addAttribute("ImageList",img);
 		
 		
 		/*List<?> vendor = shopService.selectVendor(sampleVO);
@@ -511,7 +544,7 @@ public class EgovShopController {
 	 */
 	
 	@RequestMapping("/deleteShop.do")
-	public String deleteShop(SampleVO sampleVO, @ModelAttribute("searchVO") SampleDefaultVO searchVO, SessionStatus status) throws Exception {
+	public String deleteShop(SampleVO sampleVO, SessionStatus status) throws Exception {
 
 		shopService.deleteShop(sampleVO);
 		status.setComplete();
@@ -522,21 +555,35 @@ public class EgovShopController {
 
 	/*-----------파일업로드------------- */
 	
-	@RequestMapping(value = "/fileupload.do",method = RequestMethod.POST)
-	public void upload(MultipartFile uploadfile){
+	@RequestMapping(value = "/fileupload.do", method = RequestMethod.POST)
+	public String upload(MultipartFile uploadfile, @RequestParam("selectedId") String goodsNum) throws Exception{
 	 
-		saveFile(uploadfile);
+		saveFile(uploadfile, goodsNum);
+		System.out.println(goodsNum);
+		
+		return "forward:/updateSampleView.do";
 	}
 	
-	private static final String UPLOAD_PATH = "C:\\Work\\fileupload";
-	private String saveFile(MultipartFile file){
-	    // 파일 이름 변경
+	
+	private static final String UPLOAD_PATH = "C:\\Work\\JAVA\\eGovFrameDev-3.7.0-64bit\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\INIT_FIRSTPROJECT\\images\\egovframework\\fileupload";
+	
+	private String saveFile(MultipartFile file, String goodsNum) throws Exception{
+	   
+		// 파일 이름 변경
 	    UUID uuid = UUID.randomUUID();
+	 
 	    String saveName = uuid + "_" + file.getOriginalFilename();
+	    
 
+	    
 	    // 저장할 File 객체를 생성(껍데기 파일)ㄴ
 	    File saveFile = new File(UPLOAD_PATH,saveName); // 저장할 폴더 이름, 저장할 파일 이름
-
+	    
+	    SampleVO sampleVO = new SampleVO();
+	    sampleVO.setGoodsNum(goodsNum);
+	    sampleVO.setImgUrl(saveName);
+	    shopService.insertImage(sampleVO);
+	  
 	    try {
 	        file.transferTo(saveFile); // 업로드 파일에 saveFile이라는 껍데기 입힘
 	    } catch (IOException e) {
@@ -547,8 +594,6 @@ public class EgovShopController {
 	    return saveName;
 	} // end saveFile(
 
-	
-	
 	
 	
 	
@@ -570,7 +615,8 @@ public class EgovShopController {
             @RequestParam String  sord
     ) throws Exception {
 
-   /* HashMap<String,Object> params = new HashMap<String,Object>(); */
+  
+		/* HashMap<String,Object> params = new HashMap<String,Object>(); */
     
     List<?> sampleList = shopService.selectGoodsList(searchVO);
 
@@ -642,6 +688,7 @@ public class EgovShopController {
     ModelAndView mav = new ModelAndView("jsonView");
     mav.addObject("goodsList", sampleList);
     return mav;
-    }
+  
+	}
 	   
 }

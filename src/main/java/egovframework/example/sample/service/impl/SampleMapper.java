@@ -65,6 +65,15 @@ public interface SampleMapper {
 	void insertVendor(SampleVO vo) throws Exception;
 	
 	
+	/**
+	 * 상품의 이미지를 등록한다.
+	 * @param vo - 등록할 정보가 담긴 SampleVO
+	 * @return 등록 결과
+	 * @exception Exception
+	 */
+	void insertImage(SampleVO vo) throws Exception;
+	
+	
 
 	/**
 	 * 글을 수정한다.
@@ -134,6 +143,15 @@ public interface SampleMapper {
 	 * @exception Exception
 	 */
 	List<?> selectManufacture(SampleVO sampleVO) throws Exception;
+	
+	
+	/**
+	 * 상품리스트 수정페이지의 이미지를 조회한다.
+	 * @param searchVO - 조회할 정보가 담긴 VO
+	 * @return 글 목록
+	 * @exception Exception
+	 */
+	List<?> selectImage(SampleVO sampleVO) throws Exception;
 	
 
 	/**
