@@ -195,6 +195,9 @@ public class EgovShopController {
 		
 		List<?> manufacture = shopService.selectManufacture(sampleVO);
 		model.addAttribute("resultManufacture",manufacture);
+		
+		
+		System.out.println("----------------"+sampleVO);
 				
 		return "shop/egovGoodsRegister";
 	
@@ -302,7 +305,6 @@ public class EgovShopController {
 		return "shop/createVendor";
 	
 	}
-	
 	
 	
 	/**
@@ -552,34 +554,100 @@ public class EgovShopController {
 	
 		return "forward:/egovShopList.do";
 	}
-
-	/*-----------파일업로드------------- */
 	
-	@RequestMapping(value = "/fileupload.do", method = RequestMethod.POST)
-	public String upload(MultipartFile uploadfile, @RequestParam("selectedId") String goodsNum) throws Exception{
-	 
-		saveFile(uploadfile, goodsNum);
-		System.out.println(goodsNum);
+	/**
+	 * 이미지를 삭제한다.
+	 * @param sampleVO - 삭제할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return "forward:/egovSampleList.do"
+	 * @exception Exception
+	 */
+	
+	@RequestMapping("/deleteImage.do")
+	public String deleteImage(SampleVO sampleVO, SessionStatus status, @RequestParam("selectedId2") String imgNum) throws Exception {
+
+		sampleVO.setImgNum(imgNum);
+		shopService.deleteImage(sampleVO);
+		status.setComplete();
 		
-		return "forward:/updateSampleView.do";
+		System.out.println(imgNum + "--------------------");
+
+	
+		return "forward:/egovGoodsRegister.do";
 	}
 	
 	
-	private static final String UPLOAD_PATH = "C:\\Work\\JAVA\\eGovFrameDev-3.7.0-64bit\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\INIT_FIRSTPROJECT\\images\\egovframework\\fileupload";
+
+	/*-----------파일업로드------------- */
 	
-	private String saveFile(MultipartFile file, String goodsNum) throws Exception{
+/*	@RequestMapping(value = "/fileupload.do", method = RequestMethod.POST)
+	public String upload(MultipartFile uploadfile, @RequestParam("selectedId") String goodsNum, HttpServletRequest request, Model model) throws Exception{
+	 
+	    SampleVO sampleVO = new SampleVO();
+	    
+		saveFile(uploadfile, goodsNum, request);
+		System.out.println(goodsNum);
+		
+		return "forward:/updateSampleView.do";
+	}*/
+	
+	
+	@RequestMapping(value = "/fileupload.do", method=RequestMethod.POST)
+    public ModelAndView upload(SampleVO sampleVO,
+        HttpServletRequest request,HttpServletResponse response, MultipartFile uploadfile, @RequestParam("selectedId") String goodsNum) 
+    throws Exception {
+		
+		
+		sampleVO.setGoodsNum(goodsNum);
+
+		saveFile(uploadfile, goodsNum, request);
+		System.out.println(goodsNum + "-----------------goodsNum-------");
+			
+		List<?> img = shopService.selectImage(sampleVO);		
+	    
+	    ModelAndView mav = new ModelAndView("jsonView");
+	    mav.addObject("ImageList", img);
+	    return mav;
+  
+	}
+	
+/*	@RequestMapping(value = "/ajaxTest.do", method=RequestMethod.POST)
+    public ModelAndView ajaxTest2(SampleVO sampleVO,
+        HttpServletRequest request,HttpServletResponse response) 
+    throws Exception {
+
+        HashMap<String,Object> params = new HashMap<String,Object>();
+
+    List<?> sampleList = shopService.selectGoodsList(sampleVO);
+    
+
+    ModelAndView mav = new ModelAndView("jsonView");
+    mav.addObject("goodsList", sampleList);
+    return mav;
+  
+	}
+	*/
+	
+	/*private static final String UPLOAD_PATH = "C:\\Work\\JAVA\\eGovFrameDev-3.7.0-64bit\\workspace\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp1\\wtpwebapps\\INIT_FIRSTPROJECT\\images\\egovframework\\fileupload";*/
+	
+	private String saveFile(MultipartFile file, String goodsNum, HttpServletRequest request) throws Exception{
 	   
 		// 파일 이름 변경
 	    UUID uuid = UUID.randomUUID();
 	 
 	    String saveName = uuid + "_" + file.getOriginalFilename();
 	    
-
+	    
 	    
 	    // 저장할 File 객체를 생성(껍데기 파일)ㄴ
-	    File saveFile = new File(UPLOAD_PATH,saveName); // 저장할 폴더 이름, 저장할 파일 이름
+	    /*File saveFile = new File(UPLOAD_PATH,saveName); // 저장할 폴더 이름, 저장할 파일 이름*/
+	    
+	    String uploadPath = request.getSession().getServletContext().getRealPath("/");
+	    File saveFile = new File(uploadPath + "fileupload/", saveName);
 	    
 	    SampleVO sampleVO = new SampleVO();
+	    
 	    sampleVO.setGoodsNum(goodsNum);
 	    sampleVO.setImgUrl(saveName);
 	    shopService.insertImage(sampleVO);
@@ -593,6 +661,9 @@ public class EgovShopController {
 
 	    return saveName;
 	} // end saveFile(
+	
+	
+
 
 	
 	
