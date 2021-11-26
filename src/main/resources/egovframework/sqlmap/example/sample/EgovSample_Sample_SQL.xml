@@ -16,6 +16,7 @@
        <result property="manufactureCode" column="manufacture_code"/>
       <result property="shoppingFee" column="shopping_fee"/>
       <result property="imgUrl" column="img_url" />
+      <result property="imgNum" column="img_num" />
        <result property="imgFirst" column="img_first" />
       <result property="discountRate" column="discount_rate"/>
       <result property="vendorCode" column="vendor_code"/>
@@ -28,10 +29,8 @@
       <result property="material" column="material"/>
       <result property="goodsFuntion" column="funtion"/>
       <result property="manufactureName" column="manufacture_name"/>
-   
-     
-   </resultMap>
-   
+    </resultMap>
+    
       <resultMap id="shopdetail" class="egovframework.example.sample.service.SampleVO">
       <result property="goodsNum" column="goods_num" />
       <result property="priceRetail" column="price_retail"/>
@@ -185,6 +184,19 @@
    </delete>
    
    
+   
+       <delete id="sampleDAO.deleteImage">
+     
+     
+				 DELETE FROM IMAGE
+				  WHERE GOODS_NUM = #goodsNum#
+				    AND IMG_NUM = #imgNum#
+				     
+
+      
+   </delete>
+   
+   
     
     <select id="sampleDAO.selectVendor" resultMap="sample2">
             
@@ -205,7 +217,7 @@
     SELECT * 
       FROM IMAGE I 
     					, GOODS G
-    WHERE I.GOODS_NUM = G.GOODS_NUM 
+    WHERE I.GOODS_NUM = G.GOODS_NUM  
     AND I.GOODS_NUM = #goodsNum#
 		
 				

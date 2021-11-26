@@ -141,6 +141,17 @@ public class SampleDAO extends EgovAbstractDAO {
 	public void deleteShop(SampleVO vo) throws Exception {
 		delete("sampleDAO.deleteShop", vo);
 	}
+	
+	/**
+	 * 판매처를 삭제한다.
+	 * @param vo - 삭제할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	public void deleteImage(SampleVO vo) throws Exception {
+		delete("sampleDAO.deleteImage", vo);
+	}
+
 
 	/**
 	 * 글을 조회한다.

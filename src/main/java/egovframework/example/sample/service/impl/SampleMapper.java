@@ -111,6 +111,16 @@ public interface SampleMapper {
 	 */
 	void deleteShop(SampleVO vo) throws Exception;
 	
+	
+	/**
+	 * 이미지를 삭제한다.
+	 * @param vo - 삭제할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	void deleteImage(SampleVO vo) throws Exception;
+	
+	
 	/**
 	 * 글을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 SampleVO

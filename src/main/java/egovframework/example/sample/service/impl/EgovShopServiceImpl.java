@@ -209,6 +209,17 @@ public class EgovShopServiceImpl extends EgovAbstractServiceImpl implements Egov
 	public void deleteShop(SampleVO vo) throws Exception {
 		sampleDAO.deleteSample(vo);
 	}
+	
+	/**
+	 * 이미지를 삭제한다.
+	 * @param vo - 삭제할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	@Override
+	public void deleteImage(SampleVO vo) throws Exception {
+		sampleDAO.deleteImage(vo);
+	}
 
 	/**
 	 * 글을 조회한다.
