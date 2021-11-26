@@ -203,20 +203,25 @@
                   			success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
                        alert("이미지 등록 성공") 
                       
-                       $("#imgContent").empty();
-                       
-                       
-           
+                       $("#imgContent").empty(); //
+
                        
                        for (var i = 0; i < data.ImageList.length; i++) {
-	                    		 var img = document.createElement('img'); 
+	                    		 var img = document.createElement('img');
+	                    		// var btn = document.createElement('input');
+	                   
                     	   var resultimg = data.ImageList[i];
-                    	                      	   
+                   		          	   
                     	   img.src='${pageContext.request.contextPath}/fileupload/'+resultimg.imgUrl;
+                    	  // btn.type = 'button';  
+                    	  // btn.value = 'button';
+                    	  // btn.onclick = function(){deleteImage(resultimg.imgNum)};
                            $("#imgContent").append(img);
+                        //   $("#imgContent").append(btn);
+                           
+                           $('#imgContent').append('<input type="button" id="submit" value="Submit" onclick="javascript:deleteImage('+resultimg.imgNum+');">');
                        };
-                
-                    	                        		
+                        	                        		
                      },
                      error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
                         alert("이미지 등록 실패")
@@ -227,20 +232,47 @@
        
        
        /* 이미지 삭제 ajax */
-       function deleteImage(){
+       function deleteImage(imageNum){
+    	   
+ 
         
         var yn = confirm("이미지를 삭제하시겠습니까?");
+        
+        var params = {
+              imgNum :imageNum ,
+              goodsNum : $("#goodsNum").val()
+         }
+        
         
         if(yn){
         	
         	  $.ajax({
                   type : "POST",            // HTTP method type(GET, POST) 형식이다.
                   url : "deleteImage.do",      // 컨트롤러에서 대기중인 URL 주소이다.
-                  data : $("#detailForm").serialize(),            // Json 형식의 데이터이다.
+                  data : params,            // Json 형식의 데이터이다.
                   datatype: "json",          
                			success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
                     alert("삭제성공") 
-               					deleteImageCallback(data);
+               					
+                    $("#imgContent").empty(); //
+																					alert(data.ImageList.length);
+                    
+                    
+                    for (var i = 0; i < data.ImageList.length; i++) {
+	                    		 var img = document.createElement('img');
+	                    		// var btn = document.createElement('input');
+	                   
+                 	   var resultimg = data.ImageList[i];
+                		          	   
+                 	   img.src='${pageContext.request.contextPath}/fileupload/'+resultimg.imgUrl;
+                 	  // btn.type = 'button';  
+                 	  // btn.value = 'button';
+                 	  // btn.onclick = function(){deleteImage(resultimg.imgNum)};
+                        $("#imgContent").append(img);
+                     //   $("#imgContent").append(btn);
+                        
+                        $('#imgContent').append('<input type="button" id="submit" value="Submit" onclick="javascript:deleteImage('+resultimg.imgNum+');">');
+                    };
                   },
                   error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
                      alert("삭제실패")
@@ -290,23 +322,6 @@
     }
         
         
-					  function deleteImageCallback(data){
-					        	
-					        	if(data != null){
-					        		var result = data.result;
-					        		
-					        		if(result = "SUCCESS"){
-					        			alert("이미지 삭제를 성공하였습니다.");
-					        			goGoodsList();
-					        		}
-					        		
-					        		else{
-					        			alert("이미지 삭제를 실패하였습니다.");
-					        			return;
-					        			
-					        		}
-					      	}
-					    }
 					        
     </script>
 </head>

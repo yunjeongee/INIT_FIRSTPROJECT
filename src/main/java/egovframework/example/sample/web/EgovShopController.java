@@ -564,8 +564,8 @@ public class EgovShopController {
 	 * @exception Exception
 	 */
 	
-	@RequestMapping("/deleteImage.do")
-	public String deleteImage(SampleVO sampleVO, SessionStatus status, @RequestParam("selectedId2") String imgNum) throws Exception {
+/*	@RequestMapping("/deleteImage.do")
+	public String deleteImage22(SampleVO sampleVO, SessionStatus status, @RequestParam("selectedId2") String imgNum) throws Exception {
 
 		sampleVO.setImgNum(imgNum);
 		shopService.deleteImage(sampleVO);
@@ -575,8 +575,30 @@ public class EgovShopController {
 
 	
 		return "forward:/egovGoodsRegister.do";
-	}
+	}*/
 	
+	@RequestMapping(value = "/deleteImage.do", method=RequestMethod.POST)
+    public ModelAndView deleteImage(SampleVO sampleVO,
+        HttpServletRequest request,HttpServletResponse response, @RequestParam("imgNum") String imgNum, @RequestParam("goodsNum") String goodsNum) 
+    throws Exception {
+		
+		sampleVO.setImgNum(imgNum);
+		shopService.deleteImage(sampleVO);
+		
+		
+		System.out.println(imgNum + "----------imgNum----------");
+
+		sampleVO.setGoodsNum(goodsNum);
+
+		System.out.println(goodsNum + "-----------------goodsNum-------");
+			
+		List<?> img = shopService.selectImage(sampleVO);		
+	    
+	    ModelAndView mav = new ModelAndView("jsonView");
+	    mav.addObject("ImageList", img);
+	    return mav;
+  
+	}
 	
 
 	/*-----------파일업로드------------- */
