@@ -4,8 +4,6 @@
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
 <%
   /**
   * @Class Name : egovGoodsList.jsp
@@ -48,9 +46,6 @@
     <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>"/>
  
     <script type="text/javaScript" language="javascript" defer="defer">
-    
-    
-    
     
     
    
@@ -114,7 +109,7 @@
 			         			success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
 			                // 응답코드 > 0000
 			                /* alert(data); */
-			              
+			                alert("통신 성공")
 			            },
 			            error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
 			                alert("통신 실패.")
@@ -165,7 +160,7 @@
                 </ul>
         	</div>
         	<!-- List -->
-        	<div id="table"> 
+        	<div id="table">
         		<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="카테고리ID, 케테고리명, 사용여부, Description, 등록자 표시하는 테이블">
         			<caption style="visibility:hidden">카테고리ID, 케테고리명, 사용여부, Description, 등록자 표시하는 테이블</caption>
         			<colgroup>
@@ -197,35 +192,6 @@
             				
             			</tr>
         			</c:forEach>
-        			
-        			<!-- 그리드형태 테이블 생성 -->
-        			  
-
-<%-- 								   <c:set var="i" value="0" />
-        			<c:set var="j" value="4" />     			
-				        	
-				        				<c:choose>
-				        				<c:when test="${resultList != null && fn:length(resultList) > 0}}">
-				        							<c:forEach items="${goodsNum}" var="result">
-				        							<c:if test="{i%} == 0">
-				        					<c:forEach var="result" items="${resultList}" varStatus="status">
-							        				<tr>
-							        				</c:if>
-							        				<td>${result.goodsName}</td>
-							        					<c:if test="${i%j==j-1}">
-							        				</tr>
-							        					</c:if>
-							        			<c:set var="i" value="${i+1}"/>
-							        		</c:forEach>        			
-				        			</c:when>
-				        			<c:otherwise>
-				        			<tr>
-				        			<td>존재하지 않습니다</td>
-				        			</tr>
-				        			</c:otherwise>        			
-				        			</c:choose>
-      --%>
-        			        			
         		</table>
         	</div>
         	<!-- /List -->
@@ -249,9 +215,6 @@
                           <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left:6px;" alt=""/>
                       </span>
                </li>
-               
-
-               
               </ul>
         	</div>
         </div>

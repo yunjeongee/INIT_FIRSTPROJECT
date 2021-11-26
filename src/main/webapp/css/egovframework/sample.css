@@ -97,3 +97,38 @@ select {font-family:'돋움'; font-size:12px; margin-top:0px; height:20px; paddi
 .tbtd_content_re {background-color:#F9F9F2; padding:7px 10px 5px 10px; margin:0;}
 input.txt               {height:18px; background-color:#FFF; border:1px solid #BCC8D8; padding-top:2px; color:#5e5e5e; cursor:text;}
 input.essentiality  {height:18px; background-color:#ebebeb; border:1px solid #BCC8D8; padding-top:2px; color:#000; cursor:text;}
+
+    .main {
+      border: 1px solid red;
+    }
+
+    .grid {
+      border: 1px solid green;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      @media screen and (max-width: 718px) {
+        gap: 3px;
+      }
+    }
+
+    .CardContainer {
+      border: 1px solid black;
+      width: 100%;
+      position: relative;
+      background-color: green;
+    }
+
+    .CardContainer::after {
+      display: block;
+      content: "";
+      padding-bottom: 100%;
+    }
+
+    .CardBox {
+      border: 1px solid blue;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
