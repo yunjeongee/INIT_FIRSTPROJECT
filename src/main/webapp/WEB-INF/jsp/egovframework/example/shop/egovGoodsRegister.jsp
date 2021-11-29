@@ -85,6 +85,7 @@
         /* ajax 이용해서 글 등록하기 */
         $(document).ready(function(){        
         
+        	
     				});
      
        function goGoodsList(){
@@ -211,16 +212,23 @@
 	                    		// var btn = document.createElement('input');
 	                   
                     	   var resultimg = data.ImageList[i];
+                    	   var radioBtn = $('<input type="radio" name="rbtnCount" />');
+                    	   var listVar = $('input[name=list]:checked').val();
                    		          	   
                     	   img.src='${pageContext.request.contextPath}/fileupload/'+resultimg.imgUrl;
+                      	 img.width='150';
+                  	  		 img.height='150';
                     	  // btn.type = 'button';  
                     	  // btn.value = 'button';
                     	  // btn.onclick = function(){deleteImage(resultimg.imgNum)};
                            $("#imgContent").append(img);
                         //   $("#imgContent").append(btn);
                            
-                           $('#imgContent').append('<input type="button" id="submit" value="Submit" onclick="javascript:deleteImage('+resultimg.imgNum+');">');
+                           $('#imgContent').append('<input type="button" id="submit" value="삭제" onclick="javascript:deleteImage('+resultimg.imgNum+');">');
+                            radioBtn.appendTo('#imgContent');
                        };
+                      
+                                       
                         	                        		
                      },
                      error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
@@ -239,7 +247,7 @@
         var yn = confirm("이미지를 삭제하시겠습니까?");
         
         var params = {
-              imgNum :imageNum ,
+              imgNum :imageNum,
               goodsNum : $("#goodsNum").val()
          }
         
@@ -261,17 +269,20 @@
                     for (var i = 0; i < data.ImageList.length; i++) {
 	                    		 var img = document.createElement('img');
 	                    		// var btn = document.createElement('input');
-	                   
+ 	                   var radioBtn = $('<input type="radio" name="rbtnCount" />');
                  	   var resultimg = data.ImageList[i];
                 		          	   
                  	   img.src='${pageContext.request.contextPath}/fileupload/'+resultimg.imgUrl;
+                  	  img.width='150';
+                	   	img.height='150';
                  	  // btn.type = 'button';  
                  	  // btn.value = 'button';
                  	  // btn.onclick = function(){deleteImage(resultimg.imgNum)};
                         $("#imgContent").append(img);
                      //   $("#imgContent").append(btn);
                         
-                        $('#imgContent').append('<input type="button" id="submit" value="Submit" onclick="javascript:deleteImage('+resultimg.imgNum+');">');
+                        $('#imgContent').append('<input type="button" id="submit" value="삭제" onclick="javascript:deleteImage('+resultimg.imgNum+');">');
+                        radioBtn.appendTo('#imgContent');
                     };
                   },
                   error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
@@ -494,6 +505,15 @@
     				    				
         <input type="file" id="imgAddress" name="imgAddress" placeholder="파일 선택" /><br/>
      	  <button id='img_upload' onclick="javascript:insertImg();">이미지업로드</button>
+
+     	  
+    		</tr>
+    		
+    		<tr>
+    				<td class="tbtd_caption"><label for="imgUrl"><spring:message code="title.sample.imgFirst" /></label></td>
+    				<td class="tbtd_content"> 
+    				    				
+				 			<img src ="${pageContext.request.contextPath}/fileupload/${img.imgUrl}" width = "120" height = "120"/>&nbsp;
 
      	  
     		</tr>
