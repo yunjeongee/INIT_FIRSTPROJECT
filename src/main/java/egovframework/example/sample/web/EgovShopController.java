@@ -474,7 +474,7 @@ public class EgovShopController {
 	 * @exception Exception
 	 */
 	@RequestMapping("/updateSample.do")
-	public String updateSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model, SessionStatus status)
+	public String updateSample(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model,SessionStatus status)
 			throws Exception {
 
 /*		beanValidator.validate(sampleVO, bindingResult);
@@ -484,10 +484,36 @@ public class EgovShopController {
 			return "shop/egovGoodsRegister";
 		}*/
 
-		shopService.updateSample(sampleVO);
+		
+		shopService.updateSample(sampleVO);		
 		status.setComplete();
 		return "forward:/egovGoodsList.do";
 	}
+	
+	
+	/**
+	 * 대표이미지를 수정한다.
+	 * @param sampleVO - 수정할 정보가 담긴 VO
+	 * @param searchVO - 목록 조회조건 정보가 담긴 VO
+	 * @param status
+	 * @return "forward:/egovSampleList.do"
+	 * @exception Exception
+	 */
+	@RequestMapping("/updateImageFirst.do")
+	public String updateImageFirst(@ModelAttribute("searchVO") SampleDefaultVO searchVO, SampleVO sampleVO, BindingResult bindingResult, Model model,
+			@RequestParam("selectedId") String goodsNum, @RequestParam("imgNum") String imgNum, SessionStatus status)
+			throws Exception {
+
+		sampleVO.setGoodsNum(goodsNum);
+		sampleVO.setImgNum(imgNum);	
+		shopService.updateImageN(sampleVO);
+		System.out.println(imgNum + "----------------------------------------*************************************");
+		shopService.updateImageFirst(sampleVO);
+		
+		status.setComplete();
+		return "forward:/egovGoodsList.do";
+	}
+	
 	
 	
 	/**
@@ -600,6 +626,10 @@ public class EgovShopController {
   
 	}
 	
+	
+	
+	
+
 
 	/*-----------파일업로드------------- */
 	

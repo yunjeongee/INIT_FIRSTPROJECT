@@ -187,6 +187,28 @@ public class EgovShopServiceImpl extends EgovAbstractServiceImpl implements Egov
 	}
 	
 
+	/**
+	 * 대표 이미지를 수정한다.
+	 * @param vo - 수정할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	@Override
+	public void updateImageFirst(SampleVO vo) throws Exception {
+		sampleDAO.updateImageFirst(vo);
+	}
+	
+	/**
+	 * 대표 이미지를 수정한다.
+	 * @param vo - 수정할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	@Override
+	public void updateImageN(SampleVO vo) throws Exception {
+		sampleDAO.updateImageN(vo);
+	}
+	
 
 	/**
 	 * 글을 삭제한다.

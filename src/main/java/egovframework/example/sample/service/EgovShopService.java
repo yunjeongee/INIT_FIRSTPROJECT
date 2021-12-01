@@ -103,7 +103,23 @@ public interface EgovShopService {
 	 */
 	void updateShop(SampleVO vo) throws Exception;
 	
-
+	/**
+	 * 대표이미지를 수정한다.
+	 * @param vo - 수정할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	void updateImageFirst(SampleVO vo) throws Exception;
+	
+	/**
+	 * 이미지의 값을 모두 N으로 수정한다.
+	 * @param vo - 수정할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	void updateImageN(SampleVO vo) throws Exception;
+	
+	
 	/**
 	 * 글을 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 SampleVO

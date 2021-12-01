@@ -191,7 +191,7 @@
             			 <td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.goodsNum}"/>')"><c:out value="${result.rN}"/></a></td>
             				<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.goodsNum}"/>')"><c:out value="${result.goodsNum}"/></a></td>
             				<td align="left" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.goodsNum}"/>')"><c:out value="${result.goodsName}"/></a></td>
-            				<td align="center" class="listtd"><img src ="${result.imgUrl}" width = "120" height = "120"/>&nbsp;</td>
+            				<td align="center" class="listtd"><img src ="${pageContext.request.contextPath}/fileupload/${result.imgUrl}" width = "120" height = "120"/>&nbsp;</td>
             				<td align="center" class="listtd"><a href="javascript:fn_egov_select2('<c:out value="${result.goodsNum}"/>')"><input type="button" value="판매처"></input></a></td>
             				
             				

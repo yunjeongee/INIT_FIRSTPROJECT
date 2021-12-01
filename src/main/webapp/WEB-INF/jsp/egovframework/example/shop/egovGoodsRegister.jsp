@@ -56,6 +56,7 @@
     
     <script type="text/javaScript" language="javascript" defer="defer">
         
+    /* ----------------- 기본 함수 -------------------- */
     
         /* 글 목록 화면 function */
         function fn_egov_selectList() {
@@ -81,6 +82,40 @@
                 frm.submit();
             /* } */
         }
+      
+        
+    /* ------------------ ajax 함수 -------------------- */    
+        
+        
+        
+         function updateImageFirst(){
+    	
+        	
+    	   	var imgFirst = $("#imgNum").val();
+        	        
+        var yn = confirm("대표이미지를 등록하시겠습니까?");
+        
+        if(yn){
+        	
+        	  $.ajax({
+                  type : "POST",            // HTTP method type(GET, POST) 형식이다.
+                  url : "updateImageFirst.do",      // 컨트롤러에서 대기중인 URL 주소이다.
+                  data : $("#imgForm").serialize(),            // Json 형식의 데이터이다.
+                  datatype: "json",          
+               			success : function(data){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                    alert("대표이미지 등록 성공");
+                    location.href= "egovGoodsList.do"
+                  },
+                  error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                     alert("대표이미지 등록실패")
+                  }
+              });
+      			  }
+       }
+        
+            
+        
+      
         
         /* ajax 이용해서 글 등록하기 */
         $(document).ready(function(){        
@@ -186,7 +221,7 @@
        function insertImg(){
     	   
 						   	 /* var imgUrl = $("#imgUrl").val(); */
-								var form = new FormData(document.getElementById('imageForm'));						
+								var form = new FormData(document.getElementById('imgForm'));						
 						// 이미지 객체 생성
 							 
       
@@ -401,12 +436,13 @@
     				<td class="tbtd_content"> 
 								<form:input path="material" maxlength="30" size ="60" cssClass="txt"/>
     				&nbsp;<form:errors path="material" />
+    				</td>
     		</tr>
     		
     	
     	</table>
      </div>
-     
+ 
       
 					<div id="sysbtn">
 					    	  	<ul>
@@ -439,6 +475,7 @@
 					           </li>
 					    			</c:if>
 					    			
+					    			
 					    							<li>
 					             <span class="btn_blue_l">
 					             <a href="javascript:document.detailForm.reset();"><spring:message code="button.reset" /></a>
@@ -454,86 +491,69 @@
 		       <button type="button" class="btn black"  onclick="javascript:deleteGoods();">삭제하기</button>
 						</div>
 						
-					
+						</div>
+		</form:form>
 			
 			
 					<!------------------------------------- 이미지 등록 -------------------------------------------->			
 
-				 <c:if test="${registerFlag == 'modify'}">
-   
- 
+		  <c:if test="${registerFlag == 'modify'}">
+				<form:form commandName="sampleVO" id="imgForm" name="imgForm" enctype="multipart/form-data">
+    <div id="content_pop">
+    	<!-- 타이틀 -->
+    	<div id="title">
+    		<ul>
+    			<li><img src="<c:url value='/images/egovframework/example/title_dot.gif'/>" alt=""/>
+                    <c:if test="${registerFlag == 'create'}"><spring:message code="button.create" /></c:if>
+                    <c:if test="${registerFlag == 'modify'}"><spring:message code="button.modify" /></c:if>
+                </li>
+    		</ul>
+    	</div>
+   	
     	<h2>이미지 등록</h2>
-    	<div id="table" style ="margin-top:10px;">
+    	<div id="table" style ="margin-top:7px;">
     	<table width="800" border="1" cellpadding="0" cellspacing="0" style="bordercolor:#D3E2EC; bordercolordark:#FFFFFF; BORDER-TOP:#C2D0DB 2px solid; BORDER-LEFT:#ffffff 1px solid; BORDER-RIGHT:#ffffff 1px solid; BORDER-BOTTOM:#C2D0DB 1px solid; border-collapse: collapse;">
     		<colgroup>
     			<col width="150"/>
     			<col width="?"/>
     		</colgroup>
-    		
-    		<c:if test="${registerFlag == 'modify'}">
-   
-						<tr>
-    			<td class="tbtd_caption"><label for="imgUrl"><spring:message code="title.sample.imgUrl" /></label></td>
+
+    		<tr>
+    			<td class="tbtd_caption"><label for="imgUrl"><spring:message code="title.sample.imgUrl" /> </label> </td>
     			<td class="tbtd_content" id ="imgContent">
          
- <%-- <img src ="${sampleVO.imgUrl}" width = "120" height = "120"/>&nbsp;  --%>
 
-				    <c:forEach var="img" items="${ImageList}" >
+				  <c:forEach var="img" items="${ImageList}" >
 		 						<img src ="${pageContext.request.contextPath}/fileupload/${img.imgUrl}" width = "120" height = "120"/>&nbsp;
-		 						<button type="button" onclick="javascript:deleteImage();">삭제</button>
-		 					 <input type="hidden" name="selectedId2" value="<c:out value='${img.imgNum}'/>"/>
-   					</c:forEach>
-
-   					
-   	   <%--  <c:forEach items="${imageList}" var="image">
-             <img src= "${pageContext.request.contextPath}/images/egovframework/fileupload/${image.imageName}" width="70px" height="70px"/>
-             </c:forEach> --%>
-								<%--    					
-
-    							<c:forEach var="manufacture" items="${resultManufacture}" varStatus="status">
-    							<form:option value="${manufacture.manufactureCode}" label="${manufacture.manufactureName}" />				
-    							</c:forEach>
-     			 --%>
+		 						<input type="radio" id="imgNum" name="imgNum" value="<c:out value='${img.imgNum}'/>"></input>					
+	 				</c:forEach>
+     			 
+     			 
+     			 
+     			 <br></br>
+     			 <input type="button" value="대표이미지등록" onclick="javascript:updateImageFirst();"/>					
+     			 
     			</td>
     	 </tr>
-    	 </c:if> 
-							    		
+
 
     		<tr>
     				<td class="tbtd_caption"><label for="imgUrl"><spring:message code="title.sample.imgUrl" /></label></td>
     				<td class="tbtd_content"> 
-    				    				
-        <input type="file" id="imgAddress" name="imgAddress" placeholder="파일 선택" /><br/>
-     	  <button id='img_upload' onclick="javascript:insertImg();">이미지업로드</button>
-
-     	  
+    				 <form  method="post" enctype="multipart/form-data">
+	    				 	<input type="file", name="uploadfile" placeholder="파일 선택" /><br/>
+										 <input type="button" value="업로드" onclick="javascript:insertImg();"/>							    							
+										 <input type="hidden" name="selectedId" value="<c:out value='${sampleVO.goodsNum}'/>"/> 	    										
+									</form>					
+      
+     	 </td>
     		</tr>
-    		
-    		<tr>
-    				<td class="tbtd_caption"><label for="imgUrl"><spring:message code="title.sample.imgFirst" /></label></td>
-    				<td class="tbtd_content"> 
-    				    				
-				 			<img src ="${pageContext.request.contextPath}/fileupload/${img.imgUrl}" width = "120" height = "120"/>&nbsp;
-
-     	  
-    		</tr>
-    		</c:if>	
+    	
     	</table>
      </div>
-         
-         
-         
-         <div class="btn_right mt15">
-		       <button type="button" class="btn black mr5" onclick="javascript:goGoodsList();">목록으로</button>
-		       <button type="button" class="btn black"  onclick="javascript:insertGoods();">등록하기</button>
-		       <button type="button" class="btn black"  onclick="javascript:deleteGoods();">삭제하기</button>
-						</div>
-					
-				
-					</div>
-
-
-					
+     
+     
+   	</div>
 
     <!-- 검색조건 유지 -->
    <%--  <input type="hidden" name="imgUrl" value="<c:out value='${sampleVO.imgUrl}'/>"/> --%>
@@ -542,22 +562,11 @@
     <input type="hidden" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>"/>
     <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/> 
 				
-				
+		</form:form>
+			
+	</c:if>
+	
 
-
-
-
-
-</form:form>
-						
-							<h2>파일 업로드</h2>
-								
-								<form  method="post" enctype="multipart/form-data" id="imageForm" name="imageForm">
-									    <input type="file", name="uploadfile" placeholder="파일 선택" /><br/>
-									    <input type="button" value="업로드" onclick="javascript:insertImg();"/>							    
-									    <input type="hidden" name="selectedId" value="<c:out value='${sampleVO.goodsNum}'/>"/>
-									    
-									</form>					
 						
 
 

@@ -120,8 +120,28 @@ public class SampleDAO extends EgovAbstractDAO {
 		update("sampleDAO.updateShop", vo);
 	}
 	
+	
+	/**
+	 * 대표 이미지를 수정한다.
+	 * @param vo - 수정할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	public void updateImageFirst(SampleVO vo) throws Exception {
+		update("sampleDAO.updateImageFirst", vo);
+	}
 
+	/**
+	 * ImageFirst의 값을 모두 N으로 수정한다.
+	 * @param vo - 수정할 정보가 담긴 SampleVO
+	 * @return void형
+	 * @exception Exception
+	 */
+	public void updateImageN(SampleVO vo) throws Exception {
+		update("sampleDAO.updateImageN", vo);
+	}
 
+	
 	/**
 	 * 글을 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 SampleVO

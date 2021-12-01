@@ -153,6 +153,25 @@
       ]]>
    </update>
    
+   <update id="sampleDAO.updateImageFirst">
+
+      
+					UPDATE IMAGE 
+					SET IMAGE_FIRST = 'Y'
+					WHERE GOODS_NUM = #goodsNum#
+					AND IMG_NUM = #imgNum#
+
+   </update>
+   
+   <update id="sampleDAO.updateImageN">
+      
+				UPDATE IMAGE 
+				SET IMAGE_FIRST = 'N'
+				WHERE GOODS_NUM = #goodsNum#
+   
+   </update>
+   
+   
   
   
   
